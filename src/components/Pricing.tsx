@@ -14,10 +14,15 @@ export default function Pricing({ onDemoClick }: PricingProps) {
   const { theme } = useTheme();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
 
+  const getDisplayPrice = (monthlyPrice: number) => {
+    const amount = billingCycle === 'monthly' ? monthlyPrice : monthlyPrice * 10;
+    return amount.toLocaleString('es-MX');
+  };
+
   const plans = [
-    { name: 'Landing Page', price: billingCycle === 'monthly' ? '350' : '290', description: 'Perfecto para validar una idea o producto rápido.', features: ['Diseño de 1 página', 'Optimización SEO básica', 'Formulario de contacto', 'Hosting incluido (1 año)', 'Certificado SSL'], cta: 'Elegir Básico' },
-    { name: 'Plan Pro', price: billingCycle === 'monthly' ? '750' : '620', description: 'Nuestra solución más popular para negocios en crecimiento.', features: ['Hasta 5 páginas internas', 'Integración CRM / WhatsApp', 'Copywriting persuasivo', 'Optimización de velocidad', 'Analítica avanzada'], featured: true, cta: 'Empezar Ahora' },
-    { name: 'E-commerce / App', price: billingCycle === 'monthly' ? '2500' : '2100', description: 'Sistemas robustos para ventas masivas y automatización.', features: ['Tienda online completa', 'Pasarela de pagos', 'Gestión de inventario', 'Panel de administración', 'Soporte prioritario'], cta: 'Contactar Ventas' },
+    { name: 'Landing Page', monthlyPrice: 350, description: 'Perfecto para validar una idea o producto rápido.', features: ['Diseño de 1 página', 'Optimización SEO básica', 'Formulario de contacto', 'Hosting incluido (1 año)', 'Certificado SSL'], cta: 'Elegir Básico' },
+    { name: 'Plan Pro', monthlyPrice: 750, description: 'Nuestra solución más popular para negocios en crecimiento.', features: ['Hasta 5 páginas internas', 'Integración CRM / WhatsApp', 'Copywriting persuasivo', 'Optimización de velocidad', 'Analítica avanzada'], featured: true, cta: 'Empezar Ahora' },
+    { name: 'E-commerce / App', monthlyPrice: 2500, description: 'Sistemas robustos para ventas masivas y automatización.', features: ['Tienda online completa', 'Pasarela de pagos', 'Gestión de inventario', 'Panel de administración', 'Soporte prioritario'], cta: 'Contactar Ventas' },
   ];
 
   const themeConfig = {
@@ -110,7 +115,7 @@ export default function Pricing({ onDemoClick }: PricingProps) {
           <button onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')} className="w-14 h-7 bg-white/10 rounded-full relative p-1 transition-colors hover:bg-white/20">
             <motion.div animate={{ x: billingCycle === 'monthly' ? 0 : 28 }} className="w-5 h-5 bg-brand-cyan rounded-full glow-cyan" />
           </button>
-          <span className={cx('text-sm', billingCycle === 'yearly' ? 'text-brand-text' : 'text-brand-muted')}>Anual <span className="text-brand-cyan text-[10px] font-bold ml-1">-20%</span></span>
+          <span className={cx('text-sm', billingCycle === 'yearly' ? 'text-brand-text' : 'text-brand-muted')}>Anual <span className="text-brand-cyan text-[10px] font-bold ml-1">2 meses gratis</span></span>
         </div>
       </>
     );
@@ -140,7 +145,7 @@ export default function Pricing({ onDemoClick }: PricingProps) {
                 
                 <div className={getDynamicClass(styles.priceContainer, plan.featured || false)}>
                   <div className="flex items-baseline gap-1">
-                    <span className={getDynamicClass(styles.price, plan.featured || false)}>${plan.price}</span>
+                    <span className={getDynamicClass(styles.price, plan.featured || false)}>${getDisplayPrice(plan.monthlyPrice)}</span>
                     <span className={getDynamicClass(styles.pricePeriod, plan.featured || false)}>/ {billingCycle === 'monthly' ? (theme === 'brutalist' || theme === 'retro' ? 'MES' : 'mes') : 'año'}</span>
                   </div>
                 </div>
